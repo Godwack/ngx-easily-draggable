@@ -29,6 +29,7 @@ export class NgxEasilyDroppableDirective {
   /**
    * Event that's fired when another element has been dropped on this one.
    */
+	@Output() public dragged = new EventEmitter<NgxEasilyDraggableDropEvent>();
   @Output() public dropped = new EventEmitter<NgxEasilyDraggableDropEvent>();
 
 
@@ -43,6 +44,11 @@ export class NgxEasilyDroppableDirective {
         representing: this.representing
       });
     }
+
+		this.fireDrag(this.servive.draggedElement, {
+			elementRef: this.elementRef,
+			representing: this.representing
+		});
   }
 
   @HostListener('drop', ['$event']) public drop(event: DragEvent) {
@@ -54,5 +60,9 @@ export class NgxEasilyDroppableDirective {
 
   private fire(draggedElement: NgxEasilyDraggableElement, droppedOn: NgxEasilyDraggableElement) {
     this.dropped.emit({draggedElement, droppedOn});
+  }
+
+	private fireDrag(draggedElement: NgxEasilyDraggableElement, droppedOn: NgxEasilyDraggableElement) {
+    this.dragged.emit({draggedElement, droppedOn});
   }
 }
